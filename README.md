@@ -18,7 +18,7 @@ After the initial run, use these commands to change state and get new recommenda
 
 `enemy` -- Redefine the enemy composition.
 
-`changerole` [player name] [new role] -- Changes the desired role for the player.
+`changerole [player name] [new role]` -- Changes the desired role for the player.
 
 `reset` -- Forgets everything and reboots the app.resetpools -- Reset player pools back to their proficiencies.
 
