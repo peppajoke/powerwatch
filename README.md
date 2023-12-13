@@ -20,6 +20,6 @@ After the initial run, use these commands to change state and get new recommenda
 
 `changerole [player name] [new role]` -- Changes the desired role for the player.
 
-`reset` -- Forgets everything and reboots the app.resetpools -- Reset player pools back to their proficiencies.
+`reset` -- Forgets everything and reboots the app.
 
 Most commands will give you a new sheet of recommendations automatically, after you run them.
