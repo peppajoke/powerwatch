@@ -1,0 +1,17 @@
+
+*.dll
+*.pdb
+powerwatch/obj/Debug/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+powerwatch/obj/Debug/net8.0/apphost
+powerwatch/obj/Debug/net8.0/powerwatch.AssemblyInfo.cs
+powerwatch/obj/Debug/net8.0/powerwatch.AssemblyInfoInputs.cache
+powerwatch/obj/Debug/net8.0/powerwatch.assets.cache
+*.cache
+powerwatch/obj/Debug/net8.0/powerwatch.csproj.FileListAbsolute.txt
+powerwatch/obj/Debug/net8.0/powerwatch.GeneratedMSBuildEditorConfig.editorconfig
+powerwatch/obj/Debug/net8.0/powerwatch.GlobalUsings.g.cs
+powerwatch/obj/Debug/net8.0/powerwatch.sourcelink.json
+powerwatch/obj/powerwatch.csproj.nuget.dgspec.json
+powerwatch/obj/powerwatch.csproj.nuget.g.props
+powerwatch/obj/powerwatch.csproj.nuget.g.targets
+powerwatch/obj/project.assets.json
