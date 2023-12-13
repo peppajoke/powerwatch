@@ -1,6 +1,6 @@
 public class Hero
 {
-    public string Name { get; set; }
-    public string Role { get; set; }
-    public List<string> Counters { get; set; }
+    public HeroDefinition.HeroName PlayedHero { get; set; }
+    public HeroDefinition.RoleName Role { get; set; }
+    public List<HeroDefinition.HeroName> Counters { get; set; }
 }
