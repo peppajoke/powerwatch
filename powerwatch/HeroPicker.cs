@@ -168,9 +168,9 @@ class HeroPicker
                 counterScore++;
             }
 
-            if (playerHero.Counters.Contains(enemyHero))
+            if (playerHero.Counters.Contains(enemyHero.PlayedHero))
             {
-                counterScore--;
+                //counterScore--;
             }
 
         }

@@ -13,7 +13,7 @@ public class HeroDefinition
         new Hero { PlayedHero = HeroName.SIGMA, Role = RoleName.TANK, Counters = new List<HeroName> { HeroName.SOJOURN, HeroName.WIDOWMAKER, HeroName.HANZO, HeroName.LUCIO, HeroName.BAPTISTE, HeroName.KIRIKO } },
         new Hero { PlayedHero = HeroName.WINSTON, Role = RoleName.TANK, Counters = new List<HeroName> { HeroName.ROADHOG, HeroName.REAPER, HeroName.MEI, HeroName.BASTION } },
         new Hero { PlayedHero = HeroName.WRECKINGBALL, Role = RoleName.TANK, Counters = new List<HeroName> { HeroName.SOMBRA, HeroName.JUNKRAT, HeroName.MEI, HeroName.BRIGITTE } },
-        new Hero { PlayedHero = HeroName.ZARYA, Role = RoleName.TANK, Counters = new List<HeroName> { HeroName.DVA, HeroName.KIRIKO, HeroName.BAPTISTE, HeroName.ZENYATTA, HeroName.LUCIO } },
+        new Hero { PlayedHero = HeroName.ZARYA, Role = RoleName.TANK, Counters = new List<HeroName> { HeroName.KIRIKO, HeroName.BAPTISTE, HeroName.ZENYATTA, HeroName.LUCIO } },
         new Hero { PlayedHero = HeroName.ASHE, Role = RoleName.DPS, Counters = new List<HeroName> { HeroName.GENJI, HeroName.TRACER, HeroName.ECHO, HeroName.SOLDIER76, HeroName.CASSIDY } },
         new Hero { PlayedHero = HeroName.BASTION, Role = RoleName.DPS, Counters = new List<HeroName> { HeroName.ZARYA, HeroName.ROADHOG, HeroName.WRECKINGBALL, HeroName.JUNKRAT, HeroName.PHARAH, HeroName.GENJI, HeroName.TRACER, HeroName.ANA } },
         new Hero { PlayedHero = HeroName.CASSIDY, Role = RoleName.DPS, Counters = new List<HeroName> { HeroName.REINHARDT, HeroName.WINSTON, HeroName.GENJI, HeroName.CASSIDY } },
