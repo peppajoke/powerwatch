@@ -134,10 +134,10 @@ class HeroPicker
 
             foreach (var hero in availableHeroes)
             {
-                var counterCount = GetCounterCount(hero, enemyHeroes);
-                if (counterCount > 0)
+                var counterScore = GetCounterScore(hero, enemyHeroes);
+                if (counterScore > 0)
                 {
-                    heroRecommendations.Add(new RankedHero() {Hero=hero, RankScore=counterCount});
+                    heroRecommendations.Add(new RankedHero() {Hero=hero, RankScore=counterScore});
                 }
             }
 
@@ -158,18 +158,22 @@ class HeroPicker
         }
     }
 
-    private int GetCounterCount(Hero playerHero, IEnumerable<Hero> enemyHeroes)
+    private int GetCounterScore(Hero playerHero, IEnumerable<Hero> enemyHeroes)
     {
-        var counterCount = 0;
+        var counterScore = 0;
         foreach (var enemyHero in enemyHeroes)
         {
             if (enemyHero.Counters.Contains(playerHero.PlayedHero))
             {
-                counterCount++;
+                counterScore++;
             }
-        }
 
-        //todo, do the reverse as well, demote counts for counters OF the player hero
-        return counterCount;
+            if (playerHero.Counters.Contains(enemyHero))
+            {
+                counterScore--;
+            }
+
+        }
+        return counterScore;
     }
 }
