@@ -1,5 +1,23 @@
+using System.Collections.Generic;
+using System;
+
 class HeroPool
 {
+    public HeroPool(string playerName, List<HeroDefinition.HeroName> characters = null)
+    {
+        PlayerName = playerName;
+        Characters = characters ?? new List<HeroDefinition.HeroName>();
+    }
+
     public string PlayerName { get; set; }
-    public List<HeroDefinition.HeroName> Characters { get; set; }
+    private List<HeroDefinition.HeroName> Characters { get; set; }
+
+    public List<HeroDefinition.HeroName> GetCharacters()
+    {
+        if (Characters.Any())
+        {
+            return Characters;
+        }
+        return new List<HeroDefinition.HeroName>(Enum.GetValues(typeof(HeroDefinition.HeroName)) as HeroDefinition.HeroName[]);
+    }
 }

@@ -72,6 +72,18 @@ class Program
                 case Command.List:
                     Console.WriteLine("Sorry, I haven't coded this one yet.");
                     break;
+                case Command.UnlockPlayer:
+                    try 
+                    {
+                        playerName = commandsStrings[1];
+                    }
+                    catch(IndexOutOfRangeException ex)
+                    {
+                        Console.WriteLine("Missing inputs. Example command: unlock jack");
+                        break;
+                    }
+                    _picker.UnlockPlayer(playerName);
+                    break;
                 case Command.Help:
                 default:
                     Console.WriteLine("resetpools -- Reset player pools back to their proficiencies.");
@@ -98,7 +110,7 @@ class Program
 
     private enum Command
     {
-        ResetHeroPools, LockHeroForPlayer, ResetEnemyTeam, ChangePlayerRole, HardReset, None, List, Help
+        ResetHeroPools, LockHeroForPlayer, ResetEnemyTeam, ChangePlayerRole, HardReset, None, List, Help, UnlockPlayer
     }
 
     private static Command GetCommandFromString(string command)
@@ -117,6 +129,8 @@ class Program
                 return Command.HardReset;
             case "LIST":
                 return Command.List;
+            case "UNLOCK":
+                return Command.UnlockPlayer;
             case "HELP":
                 return Command.Help;
             default:

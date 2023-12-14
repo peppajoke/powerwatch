@@ -5,13 +5,13 @@ class HeroPicker
 {
     static List<HeroPool> PlayerProficiencies = new List<HeroPool>
     {
-        new HeroPool { PlayerName = "JACK", Characters = new List<HeroDefinition.HeroName> { HeroDefinition.HeroName.HANZO, HeroDefinition.HeroName.DVA, HeroDefinition.HeroName.KIRIKO, HeroDefinition.HeroName.SOJOURN, HeroDefinition.HeroName.PHARAH, HeroDefinition.HeroName.REINHARDT } },
-        new HeroPool { PlayerName = "JUSTIN", Characters = new List<HeroDefinition.HeroName> { HeroDefinition.HeroName.MOIRA, HeroDefinition.HeroName.PHARAH, HeroDefinition.HeroName.ZENYATTA, HeroDefinition.HeroName.BASTION, HeroDefinition.HeroName.TORBJORN, HeroDefinition.HeroName.SOJOURN, HeroDefinition.HeroName.JUNKRAT, HeroDefinition.HeroName.ORISA, HeroDefinition.HeroName.REINHARDT, HeroDefinition.HeroName.SIGMA} },
-        new HeroPool { PlayerName = "LAUREN", Characters = new List<HeroDefinition.HeroName> { HeroDefinition.HeroName.MERCY, HeroDefinition.HeroName.ZARYA, HeroDefinition.HeroName.LUCIO, HeroDefinition.HeroName.MOIRA, HeroDefinition.HeroName.ORISA, HeroDefinition.HeroName.REINHARDT, HeroDefinition.HeroName.ROADHOG, HeroDefinition.HeroName.LIFEWEAVER, HeroDefinition.HeroName.TORBJORN } },
-        new HeroPool { PlayerName = "PHIL", Characters = new List<HeroDefinition.HeroName> { HeroDefinition.HeroName.MOIRA, HeroDefinition.HeroName.JUNKERQUEEN, HeroDefinition.HeroName.BASTION, HeroDefinition.HeroName.CASSIDY, HeroDefinition.HeroName.REAPER, HeroDefinition.HeroName.ILLARI, HeroDefinition.HeroName.RAMATTRA, HeroDefinition.HeroName.DVA, HeroDefinition.HeroName.REINHARDT, HeroDefinition.HeroName.ASHE, HeroDefinition.HeroName.ORISA, HeroDefinition.HeroName.WINSTON, HeroDefinition.HeroName.ANA, HeroDefinition.HeroName.BAPTISTE } }
+        new HeroPool ("JACK", new List<HeroDefinition.HeroName> { HeroDefinition.HeroName.HANZO, HeroDefinition.HeroName.DVA, HeroDefinition.HeroName.KIRIKO, HeroDefinition.HeroName.SOJOURN, HeroDefinition.HeroName.PHARAH, HeroDefinition.HeroName.REINHARDT } ),
+        new HeroPool ( "JUSTIN", new List<HeroDefinition.HeroName> { HeroDefinition.HeroName.MOIRA, HeroDefinition.HeroName.PHARAH, HeroDefinition.HeroName.ZENYATTA, HeroDefinition.HeroName.BASTION, HeroDefinition.HeroName.TORBJORN, HeroDefinition.HeroName.SOJOURN, HeroDefinition.HeroName.JUNKRAT, HeroDefinition.HeroName.ORISA, HeroDefinition.HeroName.REINHARDT, HeroDefinition.HeroName.SIGMA} ),
+        new HeroPool ( "LAUREN", new List<HeroDefinition.HeroName> { HeroDefinition.HeroName.MERCY, HeroDefinition.HeroName.ZARYA, HeroDefinition.HeroName.LUCIO, HeroDefinition.HeroName.MOIRA, HeroDefinition.HeroName.ORISA, HeroDefinition.HeroName.REINHARDT, HeroDefinition.HeroName.ROADHOG, HeroDefinition.HeroName.LIFEWEAVER, HeroDefinition.HeroName.TORBJORN } ),
+        new HeroPool ( "PHIL", new List<HeroDefinition.HeroName> { HeroDefinition.HeroName.MOIRA, HeroDefinition.HeroName.JUNKERQUEEN, HeroDefinition.HeroName.BASTION, HeroDefinition.HeroName.CASSIDY, HeroDefinition.HeroName.REAPER, HeroDefinition.HeroName.ILLARI, HeroDefinition.HeroName.RAMATTRA, HeroDefinition.HeroName.DVA, HeroDefinition.HeroName.REINHARDT, HeroDefinition.HeroName.ASHE, HeroDefinition.HeroName.ORISA, HeroDefinition.HeroName.WINSTON, HeroDefinition.HeroName.ANA, HeroDefinition.HeroName.BAPTISTE } )
     };
 
-    static Dictionary<string, HeroPool> HeroPool;
+    static Dictionary<string, HeroPool> HeroPools;
     
     private Dictionary<string, HeroDefinition.RoleName> _players = new Dictionary<string, HeroDefinition.RoleName>();
     private List<HeroDefinition.HeroName> _enemyTeam;
@@ -83,7 +83,15 @@ class HeroPicker
 
     public void ResetHeroPools()
     {
-        HeroPool = PlayerProficiencies.ToDictionary(x => x.PlayerName);
+        HeroPools = PlayerProficiencies.ToDictionary(x => x.PlayerName);
+        
+        foreach(var player in _players)
+        {
+            if (!HeroPools.ContainsKey(player.Key))
+            {
+                HeroPools.Add(player.Key, new HeroPool(player.Key, new List<HeroDefinition.HeroName>()));
+            }
+        }
     }
 
     public void Play()
@@ -108,7 +116,12 @@ class HeroPicker
             }   
         }
 
-        HeroPool[playerName] = new HeroPool { PlayerName = playerName, Characters = allowedHeroes };
+        HeroPools[playerName] = new HeroPool ( playerName, allowedHeroes );
+    }
+
+    public void UnlockPlayer(string playerName)
+    {
+        HeroPools[playerName] = new HeroPool(playerName);
     }
 
     public void PrintRecommendations()
@@ -124,8 +137,11 @@ class HeroPicker
 
             // Filter heroes based on player proficiency
             var availableHeroes = HeroDefinition.Heroes
-                .Where(hero => HeroPool.Values
-                    .Any(proficiency => proficiency.PlayerName == playerName && proficiency.Characters.Contains(hero.PlayedHero) && hero.Role == playerRole))
+                .Where(hero =>
+                    HeroPools.Values.Any(proficiency =>
+                        proficiency.PlayerName == playerName &&
+                        proficiency.GetCharacters().Contains(hero.PlayedHero) &&
+                        hero.Role == playerRole))
                 .ToList();
 
             var enemyHeroes = HeroDefinition.Heroes.Where(x => _enemyTeam.Contains(x.PlayedHero));
@@ -142,19 +158,20 @@ class HeroPicker
             }
 
             var finalRecs = heroRecommendations.OrderByDescending(x => x.RankScore);
-
             // Display the recommended hero
             if (finalRecs.Any())
             {
                 foreach(var rankedHero in finalRecs)
                 {
-                    Console.WriteLine(rankedHero.Hero.PlayedHero);
+                    Console.Write(rankedHero.Hero.PlayedHero + " (+"+rankedHero.RankScore+"), ");
                 }
             }
             else
             {
                 Console.WriteLine("No suitable hero found.");
             }
+            
+            Console.WriteLine("");
         }
     }
 
