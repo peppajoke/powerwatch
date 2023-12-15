@@ -43,6 +43,23 @@ public class HeroDefinition
         new Hero { PlayedHero = HeroName.ZENYATTA, Role = RoleName.HEALER, Counters = new List<HeroName> { HeroName.JUNKRAT, HeroName.PHARAH, HeroName.CASSIDY, HeroName.WIDOWMAKER, HeroName.ASHE, HeroName.HANZO, HeroName.TRACER, HeroName.GENJI, HeroName.KIRIKO, HeroName.ZENYATTA } }
     };
 
+    public static Hero GetHeroFromName(HeroName name)
+    {
+        return Heroes.First(x => x.PlayedHero == name);
+    }
+
+    public static List<List<HeroName>> Synergies = new List<List<HeroName>>() 
+    {
+        new List<HeroName> () {HeroName.TRACER, HeroName.LUCIO},
+        //new List<Hero> () {HeroName.TRACER, HeroName.DVA},
+        //new List<Hero> () {HeroName.RAMATTRA, HeroName.ANA},
+    };
+
+    public static List<HeroName> EveryHero()
+    {
+        return new List<HeroName>(Enum.GetValues(typeof(HeroName)) as HeroName[]);
+    }
+
     public enum RoleName
     {
         TANK,

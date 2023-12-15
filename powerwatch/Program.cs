@@ -83,6 +83,7 @@ class Program
                         break;
                     }
                     _picker.UnlockPlayer(playerName);
+                    _picker.PrintRecommendations();
                     break;
                 case Command.Help:
                 default:

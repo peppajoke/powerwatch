@@ -18,6 +18,8 @@ class HeroPool
         {
             return Characters;
         }
-        return new List<HeroDefinition.HeroName>(Enum.GetValues(typeof(HeroDefinition.HeroName)) as HeroDefinition.HeroName[]);
+        return HeroDefinition.EveryHero();
     }
+
+
 }

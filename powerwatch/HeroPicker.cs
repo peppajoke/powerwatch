@@ -5,7 +5,7 @@ class HeroPicker
 {
     static List<HeroPool> PlayerProficiencies = new List<HeroPool>
     {
-        new HeroPool ("JACK", new List<HeroDefinition.HeroName> { HeroDefinition.HeroName.HANZO, HeroDefinition.HeroName.DVA, HeroDefinition.HeroName.KIRIKO, HeroDefinition.HeroName.SOJOURN, HeroDefinition.HeroName.PHARAH, HeroDefinition.HeroName.REINHARDT } ),
+        new HeroPool ( "JACK", new List<HeroDefinition.HeroName> { HeroDefinition.HeroName.HANZO, HeroDefinition.HeroName.DVA, HeroDefinition.HeroName.KIRIKO, HeroDefinition.HeroName.SOJOURN, HeroDefinition.HeroName.PHARAH, HeroDefinition.HeroName.REINHARDT } ),
         new HeroPool ( "JUSTIN", new List<HeroDefinition.HeroName> { HeroDefinition.HeroName.MOIRA, HeroDefinition.HeroName.PHARAH, HeroDefinition.HeroName.ZENYATTA, HeroDefinition.HeroName.BASTION, HeroDefinition.HeroName.TORBJORN, HeroDefinition.HeroName.SOJOURN, HeroDefinition.HeroName.JUNKRAT, HeroDefinition.HeroName.ORISA, HeroDefinition.HeroName.REINHARDT, HeroDefinition.HeroName.SIGMA} ),
         new HeroPool ( "LAUREN", new List<HeroDefinition.HeroName> { HeroDefinition.HeroName.MERCY, HeroDefinition.HeroName.ZARYA, HeroDefinition.HeroName.LUCIO, HeroDefinition.HeroName.MOIRA, HeroDefinition.HeroName.ORISA, HeroDefinition.HeroName.REINHARDT, HeroDefinition.HeroName.ROADHOG, HeroDefinition.HeroName.LIFEWEAVER, HeroDefinition.HeroName.TORBJORN } ),
         new HeroPool ( "PHIL", new List<HeroDefinition.HeroName> { HeroDefinition.HeroName.MOIRA, HeroDefinition.HeroName.JUNKERQUEEN, HeroDefinition.HeroName.BASTION, HeroDefinition.HeroName.CASSIDY, HeroDefinition.HeroName.REAPER, HeroDefinition.HeroName.ILLARI, HeroDefinition.HeroName.RAMATTRA, HeroDefinition.HeroName.DVA, HeroDefinition.HeroName.REINHARDT, HeroDefinition.HeroName.ASHE, HeroDefinition.HeroName.ORISA, HeroDefinition.HeroName.WINSTON, HeroDefinition.HeroName.ANA, HeroDefinition.HeroName.BAPTISTE } )
@@ -127,6 +127,9 @@ class HeroPicker
     public void PrintRecommendations()
     {
         Console.WriteLine("======================");
+
+        var recommendationsByPlayer = new Dictionary<string, List<RankedHero>>();
+
         // Display recommendations for each player
         foreach (var player in _players)
         {
@@ -157,7 +160,7 @@ class HeroPicker
                 }
             }
 
-            var finalRecs = heroRecommendations.OrderByDescending(x => x.RankScore);
+            var finalRecs = heroRecommendations.OrderByDescending(x => x.RankScore).ToList();
             // Display the recommended hero
             if (finalRecs.Any())
             {
@@ -172,6 +175,111 @@ class HeroPicker
             }
             
             Console.WriteLine("");
+
+            recommendationsByPlayer.Add(playerName, finalRecs);
+        }
+        PrintPerfectTeam(recommendationsByPlayer);
+    }
+
+    private void PrintPerfectTeam(Dictionary<string, List<RankedHero>> rankedRecommendations)
+    {
+        // backfill empty recs
+        foreach (var kvp in rankedRecommendations)
+        {
+            string key = kvp.Key;
+            List<RankedHero> heroes = kvp.Value;
+
+            // Check if the list is empty, and backfill with the default list if needed
+            if (heroes == null || heroes.Count == 0)
+            {
+                rankedRecommendations[key] = new List<RankedHero>();
+
+                foreach(var heroName in HeroDefinition.EveryHero())
+                {
+                    rankedRecommendations[key].Add(new RankedHero() {PlayerName = key, Hero = HeroDefinition.GetHeroFromName(heroName), RankScore = 0 });
+                }
+            }
+        }
+
+        var allPossibleTeams = GetAllPossibleTeams(rankedRecommendations);
+
+        int i = 0;
+
+        foreach(var team in allPossibleTeams)
+        {
+            
+        }
+    }
+
+    private int GetTeamScore(List<RankedHero> team)
+    {
+        var score = team.Sum(x => x.RankScore);
+        // check for synergies, +1 for each
+
+        var heroNames = team.Select(x => x.Hero.PlayedHero).ToList();
+
+        // Flatten the list of synergies into a single list of unique hero names
+        var synergyHeroNames = HeroDefinition.Synergies.SelectMany(synergy => synergy.Select(hero => hero)).Distinct();
+
+        // Count the number of hero names in the team that are part of any synergy
+        int numberOfSynergies = synergyHeroNames.Count(heroName => team.Any(hero => hero.Hero.PlayedHero == heroName));
+
+        return score + (numberOfSynergies*10);
+    }
+
+    private List<List<RankedHero>> GetAllPossibleTeams(Dictionary<string, List<RankedHero>> rankedRecommendations)
+    {
+        var playerNames = rankedRecommendations.Keys.ToList();
+        var heroCombinations = GenerateHeroCombinations(rankedRecommendations.Values.ToList());
+
+        var result = new List<List<RankedHero>>();
+
+        foreach (var combination in heroCombinations)
+        {
+            var team = new List<RankedHero>();
+            for (var i = 0; i < playerNames.Count; i++)
+            {
+                team.Add(new RankedHero
+                {
+                    PlayerName = playerNames[i],
+                    Hero = combination[i]
+                });
+            }
+            result.Add(team);
+        }
+
+        return result;
+    }
+
+    private List<List<Hero>> GenerateHeroCombinations(List<List<RankedHero>> playerHeroLists)
+    {
+        var heroCombinations = new List<List<Hero>>();
+
+        GenerateHeroCombinationsRecursive(playerHeroLists, new List<Hero>(), heroCombinations);
+
+        return heroCombinations;
+    }
+
+    private void GenerateHeroCombinationsRecursive(List<List<RankedHero>> remainingPlayerHeroLists,
+        List<Hero> currentCombination, List<List<Hero>> heroCombinations)
+    {
+        if (currentCombination.Count == remainingPlayerHeroLists.Count)
+        {
+            heroCombinations.Add(new List<Hero>(currentCombination));
+            return;
+        }
+
+        var currentListIndex = currentCombination.Count;
+        var currentHeroList = remainingPlayerHeroLists[currentListIndex];
+
+        foreach (var rankedHero in currentHeroList)
+        {
+            if (!currentCombination.Any(hero => hero.PlayedHero == rankedHero.Hero.PlayedHero))
+            {
+                currentCombination.Add(rankedHero.Hero);
+                GenerateHeroCombinationsRecursive(remainingPlayerHeroLists, currentCombination, heroCombinations);
+                currentCombination.RemoveAt(currentCombination.Count - 1);
+            }
         }
     }
 
