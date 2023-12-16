@@ -111,6 +111,12 @@ class Program
         _picker.PrintRecommendations();
     }
 
+    public static void AddFoe(HeroName foe)
+    {
+        _picker.AddFoe(foe);
+        _picker.PrintRecommendations();
+    }
+
     private static void Initialize()
     {
         _picker = new HeroPicker();

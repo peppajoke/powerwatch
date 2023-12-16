@@ -85,6 +85,11 @@ class HeroPicker
         _enemyTeam = new List<HeroName>(newTeam);
     }
 
+    public void AddFoe(HeroName foe)
+    {
+        _enemyTeam.Add(foe);
+    }
+
     public void ResetHeroPools()
     {
         HeroPools = PlayerProficiencies.ToDictionary(x => x.PlayerName);

@@ -74,6 +74,8 @@ class SpeechListener
         semantics.Add(new SemanticResultValue("enemies", PhraseType.Command + ":" + CommandState.ChangingEnemyTeam));
         semantics.Add(new SemanticResultValue("enemy", PhraseType.Command + ":" + CommandState.ChangingEnemyTeam));
         semantics.Add(new SemanticResultValue("update enemy team", PhraseType.Command + ":" + CommandState.ChangingEnemyTeam));
+        semantics.Add(new SemanticResultValue("foe reset", PhraseType.Command + ":" + CommandState.ResetEnemyTeam));
+        semantics.Add(new SemanticResultValue("add foe", PhraseType.Command + ":" + CommandState.AddFoe));
 
         return semantics;
     }
@@ -96,7 +98,7 @@ class SpeechListener
 
     enum CommandState
     {
-        Waiting, ChangingEnemyTeam, AddFoe
+        Waiting, ChangingEnemyTeam, AddFoe, ResetEnemyTeam
     }
 
     enum PhraseType
@@ -118,7 +120,19 @@ class SpeechListener
                 CommandState cmd;
                 if (Enum.TryParse(response.Value, out _commandState))
                 {
-                    Console.WriteLine("new command received...");
+                    Console.WriteLine(response.Value.ToString());
+                }
+
+                // immediate commands here
+
+                switch(_commandState)
+                {
+                    case CommandState.ResetEnemyTeam:
+                        Program.SwapEnemyTeam(new List<HeroName>());
+                        ResetCommandState();
+                        break;
+                    default:
+                        break;
                 }
 
                 break;
@@ -132,20 +146,31 @@ class SpeechListener
                         Console.WriteLine(hero.ToString());
                         if (_newHeroes.Count == 5)
                         {
-                            Console.WriteLine("done, flushing team...");
                             Program.SwapEnemyTeam(_newHeroes);
                             _newHeroes.Clear();
+                            ResetCommandState();
                         }
                     }
                 }
                 break;
+            case CommandState.AddFoe:
+                HeroName foe;
+                if (Enum.TryParse(response.Value, out foe))
+                {
+                    Console.WriteLine(foe.ToString());
+                }
+                Program.AddFoe(foe);
+                ResetCommandState();
+                break;
             default:
                 break;
         }
-
     }
 
-
+    private void ResetCommandState()
+    {
+        _commandState = CommandState.Waiting;
+    }
 
     class VoiceResponse
     {
@@ -164,8 +189,6 @@ class SpeechListener
             }
         }
     }
-
-
 
     public void StopListening()
     {
