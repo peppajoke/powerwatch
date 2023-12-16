@@ -3,16 +3,16 @@ using System;
 
 class HeroPool
 {
-    public HeroPool(string playerName, List<HeroDefinition.HeroName> characters = null)
+    public HeroPool(string playerName, List<HeroName> characters = null)
     {
         PlayerName = playerName;
-        Characters = characters ?? new List<HeroDefinition.HeroName>();
+        Characters = characters ?? new List<HeroName>();
     }
 
     public string PlayerName { get; set; }
-    private List<HeroDefinition.HeroName> Characters { get; set; }
+    private List<HeroName> Characters { get; set; }
 
-    public List<HeroDefinition.HeroName> GetCharacters()
+    public List<HeroName> GetCharacters()
     {
         if (Characters.Any())
         {
@@ -20,6 +20,4 @@ class HeroPool
         }
         return HeroDefinition.EveryHero();
     }
-
-
 }

@@ -8,6 +8,9 @@ class Program
     {
         Initialize();
 
+        var listener = new SpeechListener();
+        listener.Listen();
+    
         var quit = false;
 
         while (!quit)
@@ -102,6 +105,11 @@ class Program
         Players, Heroes, HeroPools, EnemyTeam, Roles
     }
 
+    public static void SwapEnemyTeam(List<HeroName> newTeam)
+    {
+        _picker.SetEnemyTeam(newTeam);
+        _picker.PrintRecommendations();
+    }
 
     private static void Initialize()
     {
@@ -109,7 +117,7 @@ class Program
         _picker.Play();
     }
 
-    private enum Command
+    public enum Command
     {
         ResetHeroPools, LockHeroForPlayer, ResetEnemyTeam, ChangePlayerRole, HardReset, None, List, Help, UnlockPlayer
     }
