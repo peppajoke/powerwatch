@@ -86,7 +86,6 @@ public class HeroDefinition
         new List<HeroName> () {HeroName.LIFEWEAVER, HeroName.WRECKINGBALL},
         new List<HeroName> () {HeroName.LIFEWEAVER, HeroName.ZARYA},
         new List<HeroName> () {HeroName.LIFEWEAVER, HeroName.ASHE},
-        new List<HeroName> () {HeroName.LIFEWEAVER, HeroName.BAPTISTE},
         new List<HeroName> () {HeroName.LIFEWEAVER, HeroName.MOIRA},
 
         new List<HeroName> () {HeroName.ILLARI, HeroName.ANA},
@@ -117,7 +116,8 @@ public class HeroDefinition
         new List<HeroName> () {HeroName.MAUGA, HeroName.JUNKRAT},
         new List<HeroName> () {HeroName.MAUGA, HeroName.SOMBRA},
         new List<HeroName> () {HeroName.MAUGA, HeroName.ASHE},
-        new List<HeroName> () {HeroName.MAUGA, HeroName.PHARAH}
+        new List<HeroName> () {HeroName.MAUGA, HeroName.PHARAH},
+        new List<HeroName> () {HeroName.MAUGA, HeroName.LIFEWEAVER}
     };
 
     public static List<HeroName> EveryHero()
@@ -157,7 +157,7 @@ public class HeroDefinition
         { Map.NEW_QUEEN, MapType.PUSH},
     };
 
-    private Dictionary<Map, List<HeroName>> HeroMapSynergies = new Dictionary<Map, List<HeroName>>
+    public static Dictionary<Map, List<HeroName>> HeroMapSynergies = new Dictionary<Map, List<HeroName>>
     {
         { Map.COLOSSEO, new List<HeroName> { HeroName.WINSTON } },
         { Map.ESPERANCA, new List<HeroName> { HeroName.WRECKINGBALL } },
@@ -180,11 +180,11 @@ public class HeroDefinition
         { Map.PARAISO, new List<HeroName> { HeroName.REINHARDT, HeroName.SIGMA, HeroName.ROADHOG, HeroName.ZARYA } },
         { Map.BUSAN, new List<HeroName> { HeroName.DVA, HeroName.WRECKINGBALL } },
         { Map.NEW_JUNK_CITY, new List<HeroName> { HeroName.REAPER, HeroName.SOMBRA, HeroName.JUNKRAT, HeroName.SOLDIER76, HeroName.GENJI, HeroName.TRACER, HeroName.LUCIO } },
-        { Map.SURAVASA, new List<HeroName> { HeroName.REINHARDT, HeroName.MEI, HeroName.REAPER, HeroName.LUCIO, HeroName.BAPTISTE } },
-        { Map.SAMOA, new List<HeroName> { HeroName.LUCIO } },
+        { Map.SURAVASA, new List<HeroName> { HeroName.REINHARDT, HeroName.MEI, HeroName.REAPER, HeroName.LUCIO, HeroName.BAPTISTE, HeroName.LIFEWEAVER } },
+        { Map.SAMOA, new List<HeroName> { HeroName.LUCIO, HeroName.MAUGA } },
     };
 
-    private Dictionary<TeamSide, List<HeroName>> HeroTeamSideTypeSynergies = new Dictionary<TeamSide, List<HeroName>>
+    public static Dictionary<TeamSide, List<HeroName>> HeroTeamSideTypeSynergies = new Dictionary<TeamSide, List<HeroName>>
     {
         { TeamSide.ATTACK , new List<HeroName> { HeroName.WINSTON, HeroName.DVA, HeroName.PHARAH, HeroName.TORB, HeroName.SYMMETRA } },
         { TeamSide.DEFEND , new List<HeroName> { HeroName.ZARYA, HeroName.ROADHOG, HeroName.ORISA, HeroName.REINHARDT, HeroName.SIGMA } },

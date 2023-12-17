@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-class Program
+﻿class Program
 {
     private static HeroPicker _picker;
 
-    static void Main(string[] args)
+    static void Main()
     {
         Initialize();
 
@@ -15,15 +11,12 @@ class Program
 
         while (true)
         {
-            var commandsStrings = Console.ReadLine()?.ToUpper().Split(' ');
+            var commandsStrings = Console.ReadLine()?.ToUpper().Split(' ') ?? Array.Empty<string>();
 
-            if (commandsStrings == null || commandsStrings.Length == 0)
-            {
+            if (commandsStrings.Length == 0)
                 continue;
-            }
 
-            var firstCommandString = commandsStrings[0];
-            var command = GetCommandFromString(firstCommandString);
+            var command = GetCommandFromString(commandsStrings[0]);
 
             switch (command)
             {
@@ -51,6 +44,9 @@ class Program
                 case Command.Map:
                     SetMap(commandsStrings);
                     break;
+                case Command.Side:
+                    SetSide(commandsStrings);
+                    break;
                 case Command.Help:
                 default:
                     DisplayHelp();
@@ -67,19 +63,18 @@ class Program
 
     private static void LockHeroForPlayer(string[] commandsStrings)
     {
-        string playerName;
-        List<string> heroes;
         try
         {
-            playerName = commandsStrings[1];
-            heroes = commandsStrings[2].Split(',').ToList();
+            var playerName = commandsStrings[1];
+            var heroes = commandsStrings[2].Split(',').ToList();
+            _picker.LockPlayer(playerName, heroes);
         }
-        catch (IndexOutOfRangeException ex)
+        catch (IndexOutOfRangeException)
         {
             Console.WriteLine("Missing inputs. Example command: lock jack dva,hanzo");
             return;
         }
-        _picker.LockPlayer(playerName, heroes);
+
         _picker.PrintRecommendations();
     }
 
@@ -91,20 +86,18 @@ class Program
 
     private static void ChangePlayerRole(string[] commandsStrings)
     {
-        string playerName;
-        string roleName;
         try
         {
-            playerName = commandsStrings[1];
-            roleName = commandsStrings[2];
+            var playerName = commandsStrings[1];
+            var roleName = commandsStrings[2];
+            _picker.SetPlayerRole(playerName, roleName);
         }
-        catch (IndexOutOfRangeException ex)
+        catch (IndexOutOfRangeException)
         {
             Console.WriteLine("Missing inputs. Example command: changerole jack dps");
             return;
         }
 
-        _picker.SetPlayerRole(playerName, roleName);
         _picker.PrintRecommendations();
     }
 
@@ -116,40 +109,53 @@ class Program
 
     private static void UnlockPlayer(string[] commandsStrings)
     {
-        string playerName;
         try
         {
-            playerName = commandsStrings[1];
+            var playerName = commandsStrings[1];
+            _picker.UnlockPlayer(playerName);
         }
-        catch (IndexOutOfRangeException ex)
+        catch (IndexOutOfRangeException)
         {
             Console.WriteLine("Missing inputs. Example command: unlock jack");
             return;
         }
-        _picker.UnlockPlayer(playerName);
+
         _picker.PrintRecommendations();
     }
 
     private static void SetMap(string[] commandsStrings)
     {
-        Map map;
         try
         {
             var mapString = commandsStrings[1];
-            if (Enum.TryParse(mapString, out map))
-            {
-                Console.WriteLine(mapString);
+            if (Enum.TryParse(mapString, out Map map))
                 _picker.SetMap(map);
-            }
             else
-            {
                 Console.WriteLine("Map not found.");
-            }
         }
-        catch (IndexOutOfRangeException ex)
+        catch (IndexOutOfRangeException)
         {
             Console.WriteLine("Missing inputs. Example command: map oasis");
         }
+
+        _picker.PrintRecommendations();
+    }
+
+    private static void SetSide(string[] commandsStrings)
+    {
+        try
+        {
+            var mapString = commandsStrings[1];
+            if (Enum.TryParse(mapString, out TeamSide side))
+                _picker.SetTeamSide(side);
+            else
+                Console.WriteLine("Side not found.");
+        }
+        catch (IndexOutOfRangeException)
+        {
+            Console.WriteLine("Missing inputs. Example command: side attack");
+        }
+
         _picker.PrintRecommendations();
     }
 
@@ -160,6 +166,7 @@ class Program
         Console.WriteLine("enemy -- Redefine the enemy composition.");
         Console.WriteLine("changerole <player name> <new role> -- Changes the desired role for the player.");
         Console.WriteLine("map <map name> -- Changes the map.");
+        Console.WriteLine("side <side> -- Changes the team side.");
         Console.WriteLine("reset -- Forgets everything and reboots the app.");
     }
 
@@ -167,11 +174,6 @@ class Program
     {
         _picker = new HeroPicker();
         _picker.Play();
-    }
-
-    private enum EntityType
-    {
-        Players, Heroes, HeroPools, EnemyTeam, Roles
     }
 
     public static void SwapEnemyTeam(List<HeroName> newTeam)
@@ -188,7 +190,7 @@ class Program
 
     public enum Command
     {
-        ResetHeroPools, LockHeroForPlayer, ResetEnemyTeam, ChangePlayerRole, HardReset, None, List, Help, UnlockPlayer, Map
+        ResetHeroPools, LockHeroForPlayer, ResetEnemyTeam, ChangePlayerRole, HardReset, None, List, Help, UnlockPlayer, Map, Side
     }
 
     private static Command GetCommandFromString(string command)
@@ -213,6 +215,8 @@ class Program
                 return Command.Map;
             case "HELP":
                 return Command.Help;
+            case "SIDE":
+                return Command.Side;
             default:
                 Console.WriteLine("Command not found.");
                 return Command.None;
