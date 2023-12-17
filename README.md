@@ -32,6 +32,9 @@ Most commands will give you a new sheet of recommendations automatically, after 
 
 Since it's tough to type in enemy teams during play, if you have a mic set up and are running this app in windows, you can speak to the app to update the enemy team.
 
+
 `enemy` -- initiates an enemy list redo. After saying this, speak the names of 5 heroes, and it will update your enemy list, producing new recommendations.
+
 `foe reset` -- deletes the current enemy team
+
 `add foe` -- adds an enemy hero. You must say the name of the hero afterwards
