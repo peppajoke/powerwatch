@@ -12,6 +12,7 @@ class HeroPicker
     };
 
     static Dictionary<string, HeroPool> HeroPools;
+    private Map _map;
     
     private Dictionary<string, RoleName> _players = new Dictionary<string, RoleName>();
     private List<HeroName> _enemyTeam;
@@ -42,6 +43,11 @@ class HeroPicker
             
         }
         ResetHeroPools();
+    }
+
+    public void SetMap(Map map)
+    {
+        _map = map;
     }
 
     public void SetPlayerRole(string playerName, string roleName)
@@ -88,6 +94,12 @@ class HeroPicker
     public void AddFoe(HeroName foe)
     {
         _enemyTeam.Add(foe);
+    }
+
+    private bool IsProficient(string playerName, HeroName hero)
+    {
+        var match = PlayerProficiencies.First(x => x.PlayerName == playerName);
+        return match.GetCharacters().ToList().Contains(hero);
     }
 
     public void ResetHeroPools()
@@ -170,6 +182,11 @@ class HeroPicker
             foreach (var hero in availableHeroes)
             {
                 var counterScore = GetCounterScore(hero, enemyHeroes);
+                if (IsProficient(playerName, hero.PlayedHero))
+                {
+                    counterScore += 2;
+                }
+
                 if (counterScore > 0)
                 {
                     heroRecommendations.Add(new RankedHero() {Hero=hero, RankScore=counterScore});
@@ -180,7 +197,8 @@ class HeroPicker
             // Display the recommended hero
             if (finalRecs.Any())
             {
-                foreach(var rankedHero in finalRecs)
+                int highestRankScore = finalRecs.Max(hero => hero.RankScore);
+                foreach(var rankedHero in finalRecs.Where(hero => hero.RankScore == highestRankScore))
                 {
                     Console.Write(rankedHero.Hero.PlayedHero + " (+"+rankedHero.RankScore+"), ");
                 }
@@ -190,7 +208,6 @@ class HeroPicker
                 Console.WriteLine("No suitable hero found.");
             }
             
-            Console.WriteLine("");
 
             recommendationsByPlayer.Add(playerName, finalRecs);
         }
@@ -202,28 +219,41 @@ class HeroPicker
         // backfill empty recs
         foreach (var kvp in rankedRecommendations)
         {
-            string key = kvp.Key;
+            string playerName = kvp.Key;
             List<RankedHero> heroes = kvp.Value;
+            var role = _players[playerName];
 
             // Check if the list is empty, and backfill with the default list if needed
             if (heroes == null || heroes.Count == 0)
             {
-                rankedRecommendations[key] = new List<RankedHero>();
+                rankedRecommendations[playerName] = new List<RankedHero>();
 
-                foreach(var heroName in HeroDefinition.EveryHero())
+                foreach(var heroName in HeroDefinition.GetHeroesByRole(role))
                 {
-                    rankedRecommendations[key].Add(new RankedHero() {PlayerName = key, Hero = HeroDefinition.GetHeroFromName(heroName), RankScore = 0 });
+                    rankedRecommendations[playerName].Add(new RankedHero() {PlayerName = playerName, Hero = HeroDefinition.GetHeroFromName(heroName), RankScore = 0 });
                 }
             }
         }
 
         var allPossibleTeams = GetAllPossibleTeams(rankedRecommendations);
 
-        int i = 0;
+        var highScore = -100;
+        List<RankedHero> bestTeam = new List<RankedHero>();
 
         foreach(var team in allPossibleTeams)
         {
-            
+            var score = GetTeamScore(team);
+            if (score > highScore)
+            {
+                bestTeam = team;
+                highScore = score;
+            }
+        }
+
+        Console.WriteLine("Best possible team (+ " + highScore + ")");
+        foreach(var rankedHero in bestTeam)
+        {
+            Console.WriteLine(rankedHero.PlayerName + ": " + rankedHero.Hero.PlayedHero.ToString());
         }
     }
 
@@ -240,7 +270,7 @@ class HeroPicker
         // Count the number of hero names in the team that are part of any synergy
         int numberOfSynergies = synergyHeroNames.Count(heroName => team.Any(hero => hero.Hero.PlayedHero == heroName));
 
-        return score + (numberOfSynergies*10);
+        return score + numberOfSynergies;
     }
 
     private List<List<RankedHero>> GetAllPossibleTeams(Dictionary<string, List<RankedHero>> rankedRecommendations)
