@@ -6,6 +6,7 @@
 
 This program will ingest information about your team, roles, hero proficiencies, and your enemy team. It will then come up with some suggestions on what heroes you should be playing so you can kick some ass.
 
+Check out our live demo below!
 [![Live demo](https://img.youtube.com/vi/8g6DjE4f48M/0.jpg)](https://www.youtube.com/watch?v=8g6DjE4f48M)
 
 
