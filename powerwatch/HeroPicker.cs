@@ -7,16 +7,16 @@ class HeroPicker
 {
     private static readonly List<HeroPool> PlayerProficiencies = new List<HeroPool>
     {
-        new HeroPool("JACK", new List<HeroName> { HeroName.MAUGA, HeroName.HANZO, HeroName.DVA, HeroName.KIRIKO, HeroName.SOJOURN, HeroName.PHARAH, HeroName.REINHARDT, HeroName.SIGMA }),
+        new HeroPool("JACK", new List<HeroName> { HeroName.MEI, HeroName.REAPER, HeroName.MAUGA, HeroName.HANZO, HeroName.DVA, HeroName.KIRIKO, HeroName.SOJOURN, HeroName.PHARAH, HeroName.REINHARDT, HeroName.SIGMA }),
         new HeroPool("JUSTIN", new List<HeroName> { HeroName.MOIRA, HeroName.PHARAH, HeroName.ZENYATTA, HeroName.BASTION, HeroName.TORB, HeroName.SOJOURN, HeroName.JUNKRAT, HeroName.ORISA, HeroName.REINHARDT, HeroName.SIGMA }),
         new HeroPool("LAUREN", new List<HeroName> { HeroName.MERCY, HeroName.ZARYA, HeroName.LUCIO, HeroName.MOIRA, HeroName.ORISA, HeroName.REINHARDT, HeroName.ROADHOG, HeroName.LIFEWEAVER, HeroName.TORB }),
         new HeroPool("PHIL", new List<HeroName> { HeroName.MOIRA, HeroName.JUNKERQUEEN, HeroName.BASTION, HeroName.CASSIDY, HeroName.REAPER, HeroName.ILLARI, HeroName.RAMATTRA, HeroName.DVA, HeroName.REINHARDT, HeroName.ASHE, HeroName.ORISA, HeroName.WINSTON, HeroName.ANA, HeroName.BAPTISTE }),
-        new HeroPool("MATT", new List<HeroName> { })
+        new HeroPool("MATT", new List<HeroName> { HeroName.DVA, HeroName.GENJI, HeroName.BASTION, HeroName.HANZO, HeroName.REAPER, HeroName.SOLDIER76, HeroName.REINHARDT })
     };
 
     private Dictionary<string, int> _proficiencyPreference = new Dictionary<string, int>()
     {
-        { "JACK", 3 },
+        { "JACK", 1 },
         { "JUSTIN", 2 },
         { "LAUREN", 2 },
         { "PHIL", 3 },
@@ -27,8 +27,12 @@ class HeroPicker
     private Map _map = Map.NONE;
     private TeamSide _side = TeamSide.NEUTRAL;
 
+    private HeroWinRateRanker _ranker;
+
     private Dictionary<string, RoleName> _players = new Dictionary<string, RoleName>();
     private List<HeroName> _enemyTeam;
+
+    private const int SCORE_MOD = 45;
 
     public void SetPlayers()
     {
@@ -142,9 +146,15 @@ class HeroPicker
 
     public void Play()
     {
+        _setRanker();
         SetPlayers();
         SetEnemyTeam();
         PrintRecommendations();
+    }
+
+    private void _setRanker()
+    {
+        _ranker = new HeroWinRateRanker();
     }
 
     public void LockPlayer(string playerName, List<string> heroes)
@@ -174,7 +184,7 @@ class HeroPicker
     {
         if (HeroDefinition.HeroMapSynergies.TryGetValue(map, out var mapSynergies) && mapSynergies.Contains(hero))
         {
-            return 2;
+            return 2 * SCORE_MOD;
         }
         return 0;
     }
@@ -183,7 +193,7 @@ class HeroPicker
     {
         if (HeroDefinition.HeroTeamSideTypeSynergies.TryGetValue(side, out var sideSynergies) && sideSynergies.Contains(hero))
         {
-            return 2;
+            return 2 * SCORE_MOD;
         }
         return 0;
     }
@@ -222,7 +232,7 @@ class HeroPicker
                     HeroPools.Values.Any(proficiency =>
                         proficiency.PlayerName == playerName &&
                         hero.Role == playerRole))
-                .Shuffle().ToList();
+                .ToList();
             var enemyHeroes = HeroDefinition.Heroes.Where(x => _enemyTeam.Contains(x.PlayedHero));
 
             var heroRecommendations = new List<RankedHero>();
@@ -241,7 +251,7 @@ class HeroPicker
                     {
                         modifier = _proficiencyPreference[playerName];
                     }
-                    counterScore += modifier;
+                    counterScore += modifier * SCORE_MOD;
                 }
 
                 if (counterScore > -1)
@@ -339,7 +349,7 @@ class HeroPicker
 
             if (!availableHeroes.Any())
             {
-                availableHeroes = HeroDefinition.GetHeroesByRole(playerRole).Select(x => new RankedHero() {Hero = new Hero() {PlayedHero = x}, PlayerName = playerName, RankScore = 1}).Shuffle().ToList();
+                availableHeroes = HeroDefinition.GetHeroesByRole(playerRole).Select(x => new RankedHero() {Hero = new Hero() {PlayedHero = x}, PlayerName = playerName, RankScore = 1}).ToList();
             }
 
             var heroRecommendations = new List<RankedHero>();
@@ -347,10 +357,12 @@ class HeroPicker
             foreach (var hero in availableHeroes)
             {
                 var counterScore = GetCounterScore(hero.Hero, enemyHeroes);
-                if (IsProficient(playerName, hero.Hero.PlayedHero))
+                var modifier = 1;
+                if (_proficiencyPreference.ContainsKey(playerName))
                 {
-                    counterScore += 1;
+                    modifier = _proficiencyPreference[playerName];
                 }
+                counterScore += modifier * SCORE_MOD;
 
                 if (counterScore > -1)
                 {
@@ -395,15 +407,13 @@ class HeroPicker
             return synergy.All(hero => heroNames.Contains(hero));
         });
 
-        return score + numberOfCompleteSynergies;
+        return score + (numberOfCompleteSynergies * SCORE_MOD);
     }   
-
-
 
     private List<List<RankedHero>> GetAllPossibleTeams(Dictionary<string, List<RankedHero>> rankedRecommendations)
     {
         var playerNames = rankedRecommendations.Keys.ToList();
-        var heroCombinations = GenerateHeroCombinations(rankedRecommendations.Values.ToList()).Shuffle();
+        var heroCombinations = GenerateHeroCombinations(rankedRecommendations.Values.ToList());
 
         var result = new List<List<RankedHero>>();
 
@@ -446,7 +456,7 @@ class HeroPicker
         var currentListIndex = currentCombination.Count;
         var currentHeroList = remainingPlayerHeroLists[currentListIndex];
 
-        foreach (var rankedHero in currentHeroList.Shuffle())
+        foreach (var rankedHero in currentHeroList)
         {
             if (!currentCombination.Any(hero => hero.Hero.PlayedHero == rankedHero.Hero.PlayedHero))
             {
@@ -464,14 +474,17 @@ class HeroPicker
         {
             if (enemyHero.Counters.Contains(playerHero.PlayedHero))
             {
-                counterScore++;
+                counterScore+= SCORE_MOD;
             }
 
             if (playerHero.Counters.Contains(enemyHero.PlayedHero))
             {
-                counterScore--;
+                counterScore-= SCORE_MOD;
             }
         }
-        return counterScore;
+
+        var winRateBonus = _ranker.GetScoreForHero(playerHero.PlayedHero);
+
+        return counterScore + winRateBonus;
     }
 }

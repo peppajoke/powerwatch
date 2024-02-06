@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "powerwatch", "powerwatch\powerwatch.csproj", "{E053FC15-1B70-4346-BC27-E65D2710518A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E053FC15-1B70-4346-BC27-E65D2710518A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E053FC15-1B70-4346-BC27-E65D2710518A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E053FC15-1B70-4346-BC27-E65D2710518A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E053FC15-1B70-4346-BC27-E65D2710518A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1A20B442-C043-4828-9920-B2FBE32D1F57}
+	EndGlobalSection
+EndGlobal

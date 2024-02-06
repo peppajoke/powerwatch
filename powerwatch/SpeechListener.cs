@@ -75,6 +75,7 @@ class SpeechListener
         semantics.Add(new SemanticResultValue("enemy", PhraseType.Command + ":" + CommandState.ChangingEnemyTeam));
         semantics.Add(new SemanticResultValue("update enemy team", PhraseType.Command + ":" + CommandState.ChangingEnemyTeam));
         semantics.Add(new SemanticResultValue("foe reset", PhraseType.Command + ":" + CommandState.ResetEnemyTeam));
+        semantics.Add(new SemanticResultValue("reset", PhraseType.Command + ":" + CommandState.ResetEnemyTeam));
         semantics.Add(new SemanticResultValue("add foe", PhraseType.Command + ":" + CommandState.AddFoe));
 
         return semantics;
@@ -82,7 +83,7 @@ class SpeechListener
 
     private void SreSpeechRecognized(object sender, SpeechRecognizedEventArgs e)
     {
-        if (e.Result.Confidence >= 0.1) // You can adjust this threshold
+        if (e.Result.Confidence >= 0.1)
         {
             foreach (KeyValuePair<String, SemanticValue> child in e.Result.Semantics)
             {
@@ -180,7 +181,14 @@ class SpeechListener
         public VoiceResponse(string text)
         {
             var pieces  = text.Split(':');
-            Value = pieces[1];
+            try
+            {
+                Value = pieces[1];
+            }
+            catch(IndexOutOfRangeException e)
+            {
+                return;
+            }
 
             if (!Enum.TryParse(pieces[0], out Phrase))
             {

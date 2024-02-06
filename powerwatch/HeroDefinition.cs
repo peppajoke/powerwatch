@@ -9,7 +9,7 @@ public class HeroDefinition
         new Hero { PlayedHero = HeroName.ORISA, Role = RoleName.TANK, Counters = new List<HeroName> { HeroName.WRECKINGBALL, HeroName.GENJI, HeroName.TRACER, HeroName.SOMBRA, HeroName.REAPER, HeroName.ECHO } },
         new Hero { PlayedHero = HeroName.RAMATTRA, Role = RoleName.TANK, Counters = new List<HeroName> { HeroName.ROADHOG, HeroName.REAPER, HeroName.TRACER, HeroName.GENJI, HeroName.ECHO, HeroName.PHARAH } },
         new Hero { PlayedHero = HeroName.REINHARDT, Role = RoleName.TANK, Counters = new List<HeroName> { HeroName.TRACER, HeroName.GENJI, HeroName.PHARAH, HeroName.ECHO, HeroName.REAPER, HeroName.BASTION, HeroName.JUNKRAT } },
-        new Hero { PlayedHero = HeroName.ROADHOG, Role = RoleName.TANK, Counters = new List<HeroName> { HeroName.JUNKERQUEEN, HeroName.REAPER, HeroName.ANA } },
+        new Hero { PlayedHero = HeroName.ROADHOG, Role = RoleName.TANK, Counters = new List<HeroName> { HeroName.JUNKERQUEEN, HeroName.ANA, HeroName.BASTION, HeroName.DVA, HeroName.ZENYATTA } },
         new Hero { PlayedHero = HeroName.SIGMA, Role = RoleName.TANK, Counters = new List<HeroName> { HeroName.SOJOURN, HeroName.WIDOWMAKER, HeroName.HANZO, HeroName.LUCIO, HeroName.BAPTISTE, HeroName.KIRIKO } },
         new Hero { PlayedHero = HeroName.WINSTON, Role = RoleName.TANK, Counters = new List<HeroName> { HeroName.ROADHOG, HeroName.REAPER, HeroName.MEI, HeroName.BASTION } },
         new Hero { PlayedHero = HeroName.WRECKINGBALL, Role = RoleName.TANK, Counters = new List<HeroName> { HeroName.SOMBRA, HeroName.JUNKRAT, HeroName.MEI, HeroName.BRIGITTE } },
@@ -117,7 +117,14 @@ public class HeroDefinition
         new List<HeroName> () {HeroName.MAUGA, HeroName.SOMBRA},
         new List<HeroName> () {HeroName.MAUGA, HeroName.ASHE},
         new List<HeroName> () {HeroName.MAUGA, HeroName.PHARAH},
-        new List<HeroName> () {HeroName.MAUGA, HeroName.LIFEWEAVER}
+        new List<HeroName> () {HeroName.MAUGA, HeroName.LIFEWEAVER},
+        
+        new List<HeroName> () {HeroName.JUNKERQUEEN, HeroName.BRIGITTE},
+        new List<HeroName> () {HeroName.JUNKERQUEEN, HeroName.TRACER},
+        new List<HeroName> () {HeroName.JUNKERQUEEN, HeroName.GENJI},
+        new List<HeroName> () {HeroName.JUNKERQUEEN, HeroName.REAPER},
+
+
     };
 
     public static List<HeroName> EveryHero()
@@ -148,7 +155,7 @@ public class HeroDefinition
         { Map.NEPAL, MapType.CONTROL},
         { Map.ILIOS, MapType.CONTROL},
         { Map.OASIS, MapType.CONTROL},
-        { Map.LIJANG, MapType.CONTROL},
+        { Map.LIJIANG, MapType.CONTROL},
         { Map.ANTARTIC, MapType.CONTROL},
         { Map.SAMOA, MapType.CONTROL}, 
         
@@ -163,18 +170,18 @@ public class HeroDefinition
         { Map.ESPERANCA, new List<HeroName> { HeroName.WRECKINGBALL } },
         { Map.NEW_QUEEN, new List<HeroName> { HeroName.REINHARDT } },
         { Map.ILIOS, new List<HeroName> { HeroName.ROADHOG, HeroName.WINSTON, HeroName.TRACER, HeroName.ASHE, HeroName.BASTION, HeroName.BRIGITTE, HeroName.DVA, HeroName.DOOMFIST, HeroName.ILLARI, HeroName.JUNKERQUEEN, HeroName.JUNKRAT, HeroName.LUCIO, HeroName.MAUGA, HeroName.ORISA, HeroName.PHARAH, HeroName.REINHARDT, HeroName.ROADHOG, HeroName.SIGMA, HeroName.WINSTON, HeroName.WRECKINGBALL, HeroName.ZARYA, HeroName.ZENYATTA } },
-        { Map.LIJANG, new List<HeroName> { HeroName.WINSTON, HeroName.SYMMETRA, HeroName.MERCY, HeroName.PHARAH, HeroName.GENJI, HeroName.PHARAH, HeroName.TRACER } },
+        { Map.LIJIANG, new List<HeroName> { HeroName.WINSTON, HeroName.SYMMETRA, HeroName.MERCY, HeroName.PHARAH, HeroName.GENJI, HeroName.PHARAH, HeroName.TRACER } },
         { Map.NEPAL, new List<HeroName> { HeroName.ROADHOG, HeroName.ZARYA, HeroName.ORISA, HeroName.MEI, HeroName.SYMMETRA, HeroName.PHARAH, HeroName.LUCIO, HeroName.WINSTON, HeroName.ROADHOG } },
         { Map.OASIS, new List<HeroName> { HeroName.WRECKINGBALL, HeroName.TRACER } },
         { Map.CIRCUIT_ROYAL, new List<HeroName> { HeroName.SIGMA, HeroName.ZARYA, HeroName.PHARAH, HeroName.ECHO, HeroName.SOLDIER76, HeroName.WIDOWMAKER, HeroName.ASHE, HeroName.HANZO  } },
-        { Map.DORADO, new List<HeroName> { HeroName.REINHARDT, HeroName.ZARYA, HeroName.WIDOWMAKER, HeroName.HANZO, HeroName.CASSIDY, HeroName.TORB,  } },
+        { Map.DORADO, new List<HeroName> { HeroName.REINHARDT, HeroName.ZARYA, HeroName.WIDOWMAKER, HeroName.HANZO, HeroName.CASSIDY, HeroName.TORB } },
         { Map.JUNKERTOWN, new List<HeroName> { HeroName.DVA, HeroName.WINSTON, HeroName.ROADHOG, HeroName.WIDOWMAKER } },
         { Map.ROUTE66, new List<HeroName> { HeroName.ORISA, HeroName.SIGMA, HeroName.BAPTISTE, HeroName.DVA, HeroName.PHARAH, HeroName.HANZO, HeroName.MEI, HeroName.SOMBRA } },
         { Map.GIBRALTAR, new List<HeroName> { HeroName.SIGMA, HeroName.WINSTON, HeroName.GENJI, HeroName.ASHE } },
         { Map.BLIZZARD_WORLD, new List<HeroName> { HeroName.ORISA, HeroName.WINSTON, HeroName.WRECKINGBALL } },
         { Map.EICHENWALDE, new List<HeroName> { HeroName.REINHARDT, HeroName.ZARYA, HeroName.SIGMA } },
         { Map.HOLLYWOOD, new List<HeroName> { HeroName.DVA, HeroName.ROADHOG } },
-        { Map.KINGS_ROW, new List<HeroName> { HeroName.REINHARDT, HeroName.ORISA, HeroName.MEI } },
+        { Map.KINGS_ROW, new List<HeroName> { HeroName.REINHARDT, HeroName.ORISA, HeroName.MEI, HeroName.KIRIKO, HeroName.LIFEWEAVER, HeroName.LUCIO } },
         { Map.MIDTOWN, new List<HeroName> { HeroName.ZARYA, HeroName.DVA, HeroName.SIGMA } },
         { Map.NUMBANI, new List<HeroName> { HeroName.ZARYA, HeroName.ORISA, HeroName.WINSTON, HeroName.DOOMFIST } },
         { Map.PARAISO, new List<HeroName> { HeroName.REINHARDT, HeroName.SIGMA, HeroName.ROADHOG, HeroName.ZARYA } },
@@ -186,8 +193,8 @@ public class HeroDefinition
 
     public static Dictionary<TeamSide, List<HeroName>> HeroTeamSideTypeSynergies = new Dictionary<TeamSide, List<HeroName>>
     {
-        { TeamSide.ATTACK , new List<HeroName> { HeroName.WINSTON, HeroName.DVA, HeroName.PHARAH, HeroName.TORB, HeroName.SYMMETRA } },
-        { TeamSide.DEFEND , new List<HeroName> { HeroName.ZARYA, HeroName.ROADHOG, HeroName.ORISA, HeroName.REINHARDT, HeroName.SIGMA } },
+        { TeamSide.ATTACK , new List<HeroName> { HeroName.WINSTON, HeroName.DVA, HeroName.PHARAH, HeroName.TORB, HeroName.SYMMETRA, HeroName.KIRIKO, HeroName.MAUGA, HeroName.HANZO, HeroName.WIDOWMAKER, HeroName.DOOMFIST, HeroName.ORISA, HeroName.REAPER, HeroName.SOLDIER76, HeroName.WRECKINGBALL, HeroName.ZARYA, HeroName.ECHO, HeroName.SOMBRA } },
+        { TeamSide.DEFEND , new List<HeroName> { HeroName.ZARYA, HeroName.ROADHOG, HeroName.ORISA, HeroName.REINHARDT, HeroName.SIGMA, HeroName.JUNKRAT, HeroName.ILLARI, HeroName.BASTION, HeroName.ANA, HeroName.BAPTISTE, HeroName.BRIGITTE, HeroName.MEI, HeroName.LIFEWEAVER  } },
     };
 
 }
@@ -247,7 +254,7 @@ public enum Map
     NONE,
     CIRCUIT_ROYAL, DORADO, ROUTE66, JUNKERTOWN, RIALTO, HAVANA, GIBRALTAR, SHAMBALI,
     BLIZZARD_WORLD, NUMBANI, HOLLYWOOD, EICHENWALDE, KINGS_ROW, MIDTOWN, PARAISO,
-    BUSAN, NEPAL, ILIOS, OASIS, LIJANG, ANTARTIC, SAMOA,
+    BUSAN, NEPAL, ILIOS, OASIS, LIJIANG, ANTARTIC, SAMOA,
     COLOSSEO, ESPERANCA, NEW_QUEEN,
     NEW_JUNK_CITY, SURAVASA
 }
