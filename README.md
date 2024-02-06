@@ -6,6 +6,9 @@
 
 This program will ingest information about your team, roles, hero proficiencies, and your enemy team. It will then come up with some suggestions on what heroes you should be playing so you can kick some ass.
 
+[![Live demo](https://img.youtube.com/vi/8g6DjE4f48M/0.jpg)](https://www.youtube.com/watch?v=8g6DjE4f48M)
+
+
 Before runtime, fill in your team's hero proficiencies in HeroPicker.cs under PlayerProficiencies. Eventually, I'll move this to a cleaner place.
 
 `dotnet run`
