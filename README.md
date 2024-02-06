@@ -1,3 +1,5 @@
+![Build Status](https://github.com/peppajoke/powerwatch/actions/workflows/dotnet.yml/badge.svg)
+
 # powerwatch
 
 **Automation to make you suck less at Overwatch.**
